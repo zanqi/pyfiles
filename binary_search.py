@@ -1,7 +1,7 @@
 def binary_search(arr, target):
     l, r = 0, len(arr)-1
 
-    # RI: target is within [l, r]
+    # RI: if target is in arr, it is within [l, r]
     while l <= r:
         m = (l+r)//2
         if arr[m] == target:
