@@ -1,16 +1,20 @@
-def binary_search(arr, target):
-    l, r = 0, len(arr)-1
+from bisect import bisect_left, bisect_right
 
-    # RI: if target is in arr, it is within [l, r]
+
+def binary_search(arr, target):
+    l, r = 0, len(arr) - 1
+
+    # RI: target is not in slices outside of arr[l:r+1], i.e. -arr[l:r+1]
     while l <= r:
-        m = (l+r)//2
+        m = (l + r) // 2
         if arr[m] == target:
             return m
         if arr[m] < target:
-            l = m+1
+            l = m + 1
         else:
-            r = m-1
-    # l > r, [l, r] is empty. target is not found
+            r = m - 1
+    # l > r, arr[l:r+1] is empty. -arr[l:r+1] == arr. 
+    # => target is not found in arr
     return -1
 
 
@@ -20,3 +24,7 @@ b = binary_search([1, 2, 3], 0)
 print(b)
 c = binary_search([1, 2, 3], 1)
 print(c)
+d = bisect_left([1, 2, 3], 3)
+print(d)
+d = bisect_right([1, 2, 3], 3)
+print(d)

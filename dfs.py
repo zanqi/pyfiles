@@ -1,40 +1,47 @@
-def dfs(node, target):
-    # RI: if target is in the graph, it is reachable from node
-    if not node or node.val == target:
+from graph_utils import Node, build_graph
+
+
+# DAG DFS
+# Node
+#   val: Number
+#   neighbors: List<Node>
+# RI:
+# 1. node.val has not been checked against target
+# 2. dfs return the node within the subgraph that has val == target
+def dfs_dag(node: Node, target):
+    if node.val == target:
         return node
     for c in node.neighbors:
-        found = dfs(c, target)
+        found = dfs_dag(c, target)
         if found:
             return found
-    
-    # RI: no neighbors of node can reach target
+
+    # RI: node.val != target; dfs() return None for all node.neighbors
     return None
 
 
-class Node(object):
-    def __init__(self, v):
-        self.val = v
-        self.neighbors = []
-    
-    def __repr__(self):
-        return f'val: {self.val}, neighbors: {self.neighbors}'
+# General DFS handling circle.
+# RI:
+# 1. visited contains nodes that are processed: 
+#   node.val has been checked != target
+# 2. node.val is not checked yet
+# 3. return the node within the subgraph that has val == target
+def dfs(node: Node, target, visited: set = set()):
+    if node.val == target:
+        return node
+    visited.add(node)
+    for c in node.neighbors:
+        if c in visited:
+            continue
+        found = dfs(c, target, visited)
+        if found:
+            return found
+    # RI: node.val != target; dfs() return None for all node.neighbors
+    return None
 
-"""
-Nodes are numbered from 0 to len(node_vals).
-Node 0 is the starting node. Pass it to graph algorithm.
-Example:
-    node_vals = [1, 3, 5, 7]
-    edges = [(0, 1), (1, 2), (2, 3)]
-    node = create_graph(node_vals, edges)
-    print(dfs(node, 5))
-"""
-def create_graph(node_vals, edges):
-    nodes = [Node(v) for v in node_vals]
-    for i, j in edges:
-        nodes[i].neighbors.append(nodes[j])
-    return nodes[0]
 
 node_vals = [1, 3, 5, 7]
 edges = [(0, 1), (1, 2), (2, 3)]
-node = create_graph(node_vals, edges)
+node = build_graph(node_vals, edges)
+print(dfs_dag(node, 5))
 print(dfs(node, 5))
