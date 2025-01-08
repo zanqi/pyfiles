@@ -4,7 +4,9 @@ from bisect import bisect_left, bisect_right
 def binary_search(arr, target):
     l, r = 0, len(arr) - 1
 
-    # RI: target is not in slices outside of arr[l:r+1], i.e. -arr[l:r+1]
+    # RI: 
+    # 1. target is not in slices outside of arr[l:r+1], i.e. -arr[l:r+1]
+    # 2. [l:r+1] must shrink
     while l <= r:
         m = (l + r) // 2
         if arr[m] == target:
