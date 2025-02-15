@@ -5,9 +5,14 @@ def dijkstra(graph, start, end):
     q = [(0, start)]  # distance, node
     visited = set()
 
-    # RI:
-    # 1. q contains discovered, but not processed nodes
-    # 2. visited contains processed nodes (!= end; neighbors added into q)
+    # inv:
+    # 1. q contains discovered nodes, but neighbors not queued yet.
+    # 2. visited nodes' neighbors are queued
+    # complexity: E nodes added into q. 
+    #     Each iteration has a heappop
+    #     Each unvisited node has d heappush.
+    #     T(V, E) = Elog(E) + Elog(E) = Elog(E)
+    # Compare to dijkstra with decreaseKey: Elog(V). It's the same!
     while q:
         d, node = heappop(q)
         if node in visited:
